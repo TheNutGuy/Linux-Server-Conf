@@ -25,16 +25,16 @@ A baseline installation of a Linux distribution on a virtual machine and prepare
 	```ssh -i ~/.ssh/<PRIVATE_KEY_FILE_NAME> ubuntu@35.176.130.86```
 
 ## Update all packages
-```sudo apt-get update```
-```sudo apt-get upgrade```
-```sudo apt-get dist-upgrade```
+```sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get dist-upgrade```
 Enable automatic security updates
-```sudo apt-get install unattended-upgrades```
-```sudo dpkg-reconfigure --priority=low unattended-upgrades```
+```sudo apt-get install unattended-upgrades
+sudo dpkg-reconfigure --priority=low unattended-upgrades```
 
 ## Change timezone to UTC and Fix language issues 
-```sudo timedatectl set-timezone UTC```
-```sudo update-locale LANG=en_US.utf8 LANGUAGE=en_US.utf8 LC_ALL=en_US.utf8```
+```sudo timedatectl set-timezone UTC
+sudo update-locale LANG=en_US.utf8 LANGUAGE=en_US.utf8 LC_ALL=en_US.utf8```
 
 ## Create User
 Next we need to create a new user, `grader` to give the Udacity grader access to check our server.
@@ -51,12 +51,12 @@ A private key, grader and public grader.pub are created in my directory ~/.ssh/ 
 Next I did the following.
 ```sudo nano ../grader/.ssh/authorized_keys```
 I then pasted the entire public key, saved, exited and completed with following commands:
-```sudo chmod 700 ../grader/.ssh/```
-```sudo chmod 644 ../grader/.ssh/authorized_keys```
-```sudo chown grader ../grader/.ssh/```
-```sudo chgrp grader ../grader/.ssh/```
-```sudo chown grader ../grader/.ssh/authorized_keys```
-```sudo chgrp grader ../grader/.ssh/authorized_keys```
+```sudo chmod 700 ../grader/.ssh/
+sudo chmod 644 ../grader/.ssh/authorized_keys
+sudo chown grader ../grader/.ssh/
+sudo chgrp grader ../grader/.ssh/
+sudo chown grader ../grader/.ssh/authorized_keys
+sudo chgrp grader ../grader/.ssh/authorized_keys```
 Now you can log in with grader.
 ```ssh -i ~/.ssh/<PRIVATE_KEY_FILE_NAME> grader@35.176.130.86```
 
@@ -69,14 +69,14 @@ The next step which is good to do early on to secure and change your ports if ne
   * look for PermitRootLogin and change it to no.
 
 2. Check your UFW status: ```sudo ufw status``` (it should be 'inactive') and then run the following commands:
-  ```sudo ufw default deny incoming```
-  ```sudo ufw default allow outgoing```
-  ```sudo ufw allow 2200/tcp```
-  ```sudo ufw allow 80/tcp```
-  ```sudo ufw allow 123/udp```
-  ```sudo ufw allow www```
-  ```sudo ufw deny 22```
-  ```sudo ufw enable```
+  ```sudo ufw default deny incoming
+  sudo ufw default allow outgoing
+  sudo ufw allow 2200/tcp
+  sudo ufw allow 80/tcp
+  sudo ufw allow 123/udp
+  sudo ufw allow www
+  sudo ufw deny 22
+  sudo ufw enable```
 
 3. Configure the Lightsail firewall in your control panel to match the ufw ports you've allowed.
 
@@ -85,25 +85,25 @@ The next step which is good to do early on to secure and change your ports if ne
 
 ## *Special* Configure fail2ban to monitor unsuccessful login attempts
 Type the following in your terminal.
-```sudo apt-get install fail2ban sendmail```
-```sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local```
-```sudo nano /etc/fail2ban/jail.local```
+```sudo apt-get install fail2ban sendmail
+sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+sudo nano /etc/fail2ban/jail.local```
 Then find and update the following:
-```destemail = [my email address]```
-```action = %(action_mwl)s```
-```[ssh]```
-```banaction = ufw-ssh```
-```port     = 2200```
+```destemail = [my email address]
+action = %(action_mwl)s
+[ssh]
+banaction = ufw-ssh
+port = 2200```
 Save and exit.
 Create the ufw-ssh action referenced above:
 ```sudo nano /etc/fail2ban/action.d/ufw-ssh.conf```
 Add the following:
-```[Definition]```
-```actionstart =```
-```actionstop =```
-```actioncheck =```
-```actionban = ufw insert 1 deny from 35.176.130.86 to any app OpenSSH```
-```actionunban = ufw delete deny from 35.176.130.86 to any app OpenSSH```
+```[Definition]
+actionstart =
+actionstop =
+actioncheck =
+actionban = ufw insert 1 deny from 35.176.130.86 to any app OpenSSH
+actionunban = ufw delete deny from 35.176.130.86 to any app OpenSSH```
 Finally, restart fail2ban:
 ```sudo service fail2ban restart```
 
@@ -112,15 +112,15 @@ python3 comes default with the application to install python 2 run the following
 ```sudo apt install python```
 
 ## Install apache2
-```sudo apt-get install apache2 libapache2-mod-wsgi-py3 git```
-```sudo service apache2 restart```
+```sudo apt-get install apache2 libapache2-mod-wsgi-py3 git
+sudo service apache2 restart```
 
 ## PostgreSQL
 Next install PostgreSQL:
 ```sudo apt-get install postgresql```
 I then ran the following commands to log into the postgres user,I then created the database and user to which I assigned privileges to peform operations on the database:
-```sudo su - postgres```
-```psql```
+```sudo su - postgres
+psql```
 postgres=# ```create database catalog;```
 postgres=# ```create user catalog with encrypted password 'password';```
 postgres=# ```grant all privileges on database catalog to catalog;```
@@ -137,17 +137,17 @@ postgres=# ```\q```
 7. Install pip3 `sudo apt-get install python3-pip`
 8. Use pip to install the requirements file `sudo pip3 install -r requirements.txt`
 9. Install the following
-    ```sudo apt-get -qqy install postgresql python-psycopg2```
-    ```sudo pip3 install sqlalchemy```
-    ```sudo pip3 install httplib2```
-    ```sudo apt-get install python-psycopg2```
-    ```sudo apt-get install libpq-dev```
-    ```sudo pip3 install flask```
-    ```sudo pip3 install flask-httpauth```
-    ```sudo pip3 install flask-sqlalchemy```
-    ```sudo pip3 install requests```
-    ```sudo pip3 install --upgrade oauth2client```
-    ```sudo pip3 install psycopg2```
+    ```sudo apt-get -qqy install postgresql python-psycopg2
+    sudo pip3 install sqlalchemy
+    sudo pip3 install httplib2
+    sudo apt-get install python-psycopg2
+    sudo apt-get install libpq-dev
+    sudo pip3 install flask
+    sudo pip3 install flask-httpauth
+    sudo pip3 install flask-sqlalchemy
+    sudo pip3 install requests
+    sudo pip3 install --upgrade oauth2client
+    sudo pip3 install psycopg2```
 ## Configure and Enable a New Virtual Host
 1. Create catalog.conf ```sudo nano /etc/apache2/sites-available/catalog.conf```
 2. Add the following lines of code to the file to configure the virtual host. 
@@ -189,18 +189,18 @@ save and close
 
 ## *Special* Configure mod_wsgi to work with python 3.6
 Type in terminal
-```sudo apt install build-essential```
-```sudo apt install libssl-dev zlib1g-dev libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev```
-```sudo apt install libgdbm-dev libdb5.3-dev libbz2-dev libexpat1-dev liblzma-dev tk-dev```
-```wget https://www.python.org/ftp/python/3.6.2/Python-3.6.2.tar.xz```
-```tar xf Python-3.6.2.tar.xz```
-```cd Python-3.6.2```
-```./configure --enable-shared --enable-optimizations```
+```sudo apt install build-essential
+sudo apt install libssl-dev zlib1g-dev libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev
+sudo apt install libgdbm-dev libdb5.3-dev libbz2-dev libexpat1-dev liblzma-dev tk-dev
+wget https://www.python.org/ftp/python/3.6.2/Python-3.6.2.tar.xz
+tar xf Python-3.6.2.tar.xz
+cd Python-3.6.2
+./configure --enable-shared --enable-optimizations```
 Install the mod_wsgi 4.5.18 or latest version
-```wget "https://github.com/GrahamDumpleton/mod_wsgi/archive/4.5.18.tar.gz"```
-```tar xf 4.5.18.tar.gz```
-```cd mod_wsgi-4.5.18```
-```./configure --with-python=/usr/local/bin/python3.6```
+```wget "https://github.com/GrahamDumpleton/mod_wsgi/archive/4.5.18.tar.gz"
+tar xf 4.5.18.tar.gz
+cd mod_wsgi-4.5.18
+./configure --with-python=/usr/local/bin/python3.6```
 
 ## Edit the project files to be able to communicate to the web server
 # Database_setup.py
@@ -223,8 +223,8 @@ Install the mod_wsgi 4.5.18 or latest version
 
 ## Setup the restaurant database
 Run the following commands:
-```cd /var/www/html```
-```sudo python3 database_setup.py```
+```cd /var/www/html
+sudo python3 database_setup.py```
 Adjust the id column to the serial type, type the following commands:
 ```sudo -u postgres psql```
     \c restaurantdb
@@ -237,9 +237,9 @@ Fill the database with
 ```sudo python3 DataAdd.py```
 
 ## Reload & Restart Apache Server
-```sudo service apache2 reload```
-```sudo service apache2 restart```
-```sudo service ssh restart```
+```sudo service apache2 reload
+sudo service apache2 restart
+sudo service ssh restart```
 
 ## Finished!
 You can now connect by using the ip "35.176.130.86.xip.io" in your browser!
